@@ -12,13 +12,13 @@ using System.Threading;
 namespace SleepBarber5._1
 {
     public partial class Form2 : Form {
-        int BARBERNUM, CHAIRNUM, CUSTOMERNUM, SPEED;
+        int BARBERNUM, CHAIRNUM, CUSTOMERNUM;
         Random random = new Random();
         int[] customerList;
         System.Windows.Forms.Timer timer;
 
-        Semaphore numEmptyChairs;
         int numEmptyChairsCount;
+        Semaphore numEmptyChairs;
         Semaphore numEmptyBarbers;
         bool[] barberIsAwake;
         bool[] barberIsEmpty;
@@ -28,27 +28,15 @@ namespace SleepBarber5._1
         Thread[] barberTid;
         Thread[] customerTid;
 
-        public Form2(int BarberN, int WChairN, int CustomerN, int speed)  {
-            BARBERNUM = 2;
-            CHAIRNUM = 3;
-            CUSTOMERNUM = 10;
-            SPEED = 5;
+        public Form2(int BarberN, int WChairN, int CustomerN)  {
+            BARBERNUM = BarberN;
+            CHAIRNUM = WChairN;
+            CUSTOMERNUM = CustomerN;
+
             customerList = new int[CUSTOMERNUM];
             InitializeComponent();
             SetCustomer();
             setTimer();
-        }
-
-        private void SetCustomer() {
-            for (int i = 0; i < CUSTOMERNUM; i++)  {
-                customerList[i] = i;
-            }
-        }
-
-        private void setTimer()  {
-            timer = new System.Windows.Forms.Timer();
-            timer.Interval = 5;
-            timer.Start();
         }
 
         public void Main() {
@@ -97,13 +85,13 @@ namespace SleepBarber5._1
 
             while (true) {
                 if (numEmptyChairsCount == CHAIRNUM && barberIsEmpty[number]){
-                    MessageBox.Show("The barber " + number + " is sleeping\n");
+                    MessageBox.Show("理髮師" + number + "號在睡覺\n");
                     barberIsAwake[number] = false;
                 }
                 isCutting[number].WaitOne();
-                Console.WriteLine("The barber " + number + " is cutting hair\n");
+                Console.WriteLine("理髮師" + number + "號開始剪頭髮\n");
                 Thread.Sleep(3000);
-                Console.WriteLine("The barber " + number + " has finished cutting hair.\n");
+                Console.WriteLine("理髮師" + number + "號剪完頭髮\n");
                 doneCutting[number].Release(1);
 
                 numEmptyBarbers.Release(1);
@@ -114,12 +102,12 @@ namespace SleepBarber5._1
         void customer(object number) {
          
             int num = Convert.ToInt32(number);
-            Console.WriteLine("Customer " + num + " arrived at barber shop.\n");
+            Console.WriteLine("客人" + num + "號進入店內\n");
             Thread.Sleep(50);
             if (numEmptyChairsCount != 0){
                 numEmptyChairs.WaitOne();
                 numEmptyChairsCount--;
-                Console.WriteLine("Customer " + num + " entering waiting room.\n");
+                Console.WriteLine("客人" + num + "號坐在椅子上等待\n");
                 int chairNo = getEmptyChair();
                 int _time = getRandomTime(80, 5);        
                 Thread.Sleep(_time);         //time of goint to waiting chair
@@ -127,29 +115,27 @@ namespace SleepBarber5._1
 
                 int bnum = getEmptyBarber();
                 if (bnum == -1){
-                    Console.WriteLine("ERROR!");
+                    Console.WriteLine("XXXXXXXX");
                     return;
                 }
     
                 numEmptyChairs.Release(1);
                 numEmptyChairsCount++;
-                chairIsEmpty[chairNo] = true;
-              //Console.WriteLine("Customer " + num + " walking to the barber " + bnum + ".\n");
+                chairIsEmpty[chairNo] = true;           
 
                 _time = getRandomTime(15, 5);             
                 Thread.Sleep(_time);    //time to move to barber
 
                 if (!barberIsAwake[bnum]){
-                    Console.WriteLine("Customer " + num + " waking the barber " + bnum + ".\n");
+                    Console.WriteLine("客人" + num + "號叫醒理髮師" + bnum + "號\n");
                     barberIsAwake[bnum] = true;
-                    Console.WriteLine("barber " + bnum + " is awaked.\n");
+                    Console.WriteLine("理髮師" + bnum + "號被叫醒\n");
                 }
                 isCutting[bnum].Release(1);
                 doneCutting[bnum].WaitOne();
             }
             else Thread.Sleep(500);
-           // customer.moveFromAtoB(point_customBorn, 50, timer);
-            Console.WriteLine("Customer " + num + " leaving barber shop.\n");
+            Console.WriteLine("客人" + num + "號離開了理髮店\n");
         }
 
         int getEmptyChair(){
@@ -160,8 +146,7 @@ namespace SleepBarber5._1
            // Console.WriteLine("getEmptyChair ERROR!");
            return -1;
         }
-
-       
+        
 
         private void button1_Click_1(object sender, EventArgs e){
             Main();
@@ -176,7 +161,22 @@ namespace SleepBarber5._1
         }
         
         int getRandomTime(int baseTime, int updownTime){
-            return SPEED * (int)(random.Next(updownTime) + baseTime);
+            return 5 * (int)(random.Next(updownTime) + baseTime);
+        }
+
+        private void SetCustomer()
+        {
+            for (int i = 0; i < CUSTOMERNUM; i++)
+            {
+                customerList[i] = i;
+            }
+        }
+
+        private void setTimer()
+        {
+            timer = new System.Windows.Forms.Timer();
+            timer.Interval = 5;
+            timer.Start();
         }
     }
 }

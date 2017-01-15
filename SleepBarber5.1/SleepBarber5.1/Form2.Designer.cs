@@ -33,9 +33,10 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(390, 42);
+            this.button1.Font = new System.Drawing.Font("微軟正黑體", 27.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.button1.Location = new System.Drawing.Point(12, 12);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(226, 180);
+            this.button1.Size = new System.Drawing.Size(226, 237);
             this.button1.TabIndex = 0;
             this.button1.Text = "按下去開始理髮";
             this.button1.UseVisualStyleBackColor = true;
@@ -45,10 +46,10 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(651, 261);
+            this.ClientSize = new System.Drawing.Size(246, 261);
             this.Controls.Add(this.button1);
             this.Name = "Form2";
-            this.Text = "Form2";
+            this.Text = "開店";
             this.ResumeLayout(false);
 
         }

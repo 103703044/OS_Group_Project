@@ -20,9 +20,10 @@ namespace SleepBarber5._1
         private void button1_Click(object sender, EventArgs e)
         {
                new Form2(Decimal.ToInt32(numericUpDown1.Value), Decimal.ToInt32(numericUpDown2.Value),
-               Decimal.ToInt32(numericUpDown3.Value), Decimal.ToInt32(numericUpDown4.Value)).Show();
+               Decimal.ToInt32(numericUpDown3.Value)).Show();
               this.Hide();
         }
+
 
     }
 }
